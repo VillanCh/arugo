@@ -1,7 +1,7 @@
 rabbit_connection:
   host: ${RABBITMQ_HOST:127.0.0.1}
   port: ${RABBITMQ_PORT:5672}
-  virtual_host: ${RABBITMQ_VIRTUAL_HOST:rolling}
+  virtual_host: ${RABBITMQ_VIRTUAL_HOST:arugo}
   ssl: false
   ssl_options:
     certfile: client/cert.pem
