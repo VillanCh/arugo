@@ -1,0 +1,12 @@
+rabbit_connection:
+  host: ${RABBITMQ_HOST:127.0.0.1}
+  port: ${RABBITMQ_PORT:5672}
+  virtual_host: ${RABBITMQ_VIRTUAL_HOST:rolling}
+  ssl: false
+  ssl_options:
+    certfile: client/cert.pem
+    keyfile: client/key.pem
+    ca_certs: Null
+rabbit_credentials:
+  username: ${RABBITMQ_USER:guest}
+  password: ${RABBITMQ_PASS:guest}

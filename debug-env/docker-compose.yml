@@ -1,0 +1,13 @@
+version: "2.2"
+
+services:
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=rolling
+    ports:
+      - 15672:15672
+      - 5672:5672
