@@ -111,7 +111,7 @@ func (app *Arugo) initConsumer(conn *amqp.Connection, consumer *arugoConsumer) (
 	//}()
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Errorf("initialize consumer error: %s", err)
 	}
 
 	var consumeKey string
@@ -127,7 +127,7 @@ func (app *Arugo) initConsumer(conn *amqp.Connection, consumer *arugoConsumer) (
 		consumeConfig.Args, )
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Errorf("consuming consumer: %s error: %s", consumer.Consumer.GetQueueName(), err)
 	}
 	return comingChan, nil
 }
