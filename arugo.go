@@ -85,16 +85,16 @@ func (app *Arugo) AddConsumer(key string, consumer ArugoConsumerIf) error {
 func _initConsumer(conn *amqp.Connection, consumer ArugoConsumerIf) (*amqp.Channel, error) {
 	channel, err := conn.Channel()
 	if err != nil {
-		return nil, err
+		return nil, errors.Errorf("%s start channel error: %s", consumer.GetQueueName(), err)
 	}
 
 	if err := channel.Qos(1, 0, false); err != nil {
-		return nil, err
+		return nil, errors.Errorf("%s set qos error: %s", consumer.GetQueueName(), err)
 	}
 
 	err = consumer.OnChannelCreated(channel)
 	if err != nil {
-		return nil, err
+		return nil, errors.Errorf("%s execute OnChannelCreated error: %s", consumer.GetQueueName(), err)
 	}
 	return channel, nil
 }
