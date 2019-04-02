@@ -150,13 +150,12 @@ func (app *Arugo) consumeAMQPDeliveryChannal(consumer *arugoConsumer, comingChan
 
 func (app *Arugo) run() error {
 	conn, err := amqp.Dial(app.AmqpURI)
-	defer conn.Close()
-
 	if err != nil {
 		log.Printf("connection error with %s", err)
 		log.Printf("trying to reconnect.")
 		return err
 	}
+	defer conn.Close()
 
 	log.Println("connection is open.")
 
