@@ -228,7 +228,7 @@ func (app *Arugo) Start(Detach bool) error {
 	if Detach {
 		return nil
 	} else {
-		ticker := time.Tick(1)
+		ticker := time.Tick(1 * time.Second)
 		for {
 			select {
 			case <-ticker:
