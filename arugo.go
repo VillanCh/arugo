@@ -123,9 +123,10 @@ func (app *Arugo) initConsumer(conn *amqp.Connection, consumer *arugoConsumer) (
 
 	comingChan, err := channel.Consume(
 		queueName, consumeKey,
-		consumeConfig.NoAck, consumeConfig.Exclusive, consumeConfig.NoLocal, consumeConfig.NoWait,
-		consumeConfig.Args, )
-
+		consumeConfig.NoAck, consumeConfig.Exclusive,
+		consumeConfig.NoLocal, consumeConfig.NoWait,
+		consumeConfig.Args,
+	)
 	if err != nil {
 		return nil, errors.Errorf("consuming consumer: %s error: %s", consumer.Consumer.GetQueueName(), err)
 	}
