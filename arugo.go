@@ -3,8 +3,8 @@ package arugo
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
-	"log"
 	"sync"
 	"time"
 )

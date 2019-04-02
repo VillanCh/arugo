@@ -1,8 +1,8 @@
 package arugo
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
-	"log"
 	"testing"
 	"time"
 )
@@ -117,9 +117,9 @@ func TestFunctions(t *testing.T) {
 
 	time.Sleep(2 * time.Second)
 
-	if _checked{
+	if _checked {
 		t.Log("测试成功")
-	}else{
+	} else {
 		t.Error("没有收到消息")
 	}
 }
