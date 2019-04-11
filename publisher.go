@@ -40,6 +40,10 @@ func (p *ArugoPublisher) buildChannelFromConn(conn *amqp.Connection, confirm boo
 
 func (p *ArugoPublisher) publish(exchange, key string, mandatory, immediate bool, msg amqp.Publishing) error {
 	var err error
+	if p == nil{
+		return errors.New("publisher is nil. unexpected!")
+	}
+	
 	if p.conn == nil {
 		p.conn, err = p.buildConnection()
 		if err != nil {

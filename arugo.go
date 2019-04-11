@@ -103,13 +103,6 @@ func (app *Arugo) initConsumer(conn *amqp.Connection, consumer *arugoConsumer) (
 	queueName := consumer.Consumer.GetQueueName()
 	consumeConfig := consumer.Consumer.GetConsumeConfig()
 	channel, err := _initConsumer(conn, consumer.Consumer)
-	//defer func() {
-	//	consumer.Alive = false
-	//	if err := channel.Close(); err != nil {
-	//		log.Fatalf("cannot close channel with error: %s", err)
-	//	}
-	//}()
-
 	if err != nil {
 		return nil, errors.Errorf("initialize consumer error: %s", err)
 	}
