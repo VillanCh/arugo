@@ -2,6 +2,7 @@ package arugo
 
 import (
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
 )
 
@@ -43,7 +44,7 @@ func (p *ArugoPublisher) publish(exchange, key string, mandatory, immediate bool
 	if p == nil{
 		return errors.New("publisher is nil. unexpected!")
 	}
-	
+
 	if p.conn == nil {
 		p.conn, err = p.buildConnection()
 		if err != nil {
@@ -72,13 +73,18 @@ func (p *ArugoPublisher) Publish(exchange, key string, mandatory, immediate bool
 	for {
 		err := p.publish(exchange, key, mandatory, immediate, msg)
 		if err != nil {
+			logrus.Warnf("publishing failed: %s", err)
 			count += 1
 		} else {
 			return nil
 		}
 
-		if count > p.retry {
-			return err
+		if p == nil{
+			logrus.Warnf("publishing is nil...?!?")
+		}else{
+			if count > p.retry {
+				return err
+			}
 		}
 	}
 }
