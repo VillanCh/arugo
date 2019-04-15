@@ -24,13 +24,85 @@ type AmqpConsumeConfig struct {
 	Args       amqp.Table
 }
 
+// 定义 Consumer 接口
 type ArugoConsumerIf interface {
 	GetConsumeConfig() *AmqpConsumeConfig
 	GetQueueName() string
 	OnChannelCreated(channel *amqp.Channel) error
 	Handle(req amqp.Delivery) error
+	GetArugoApp() (*Arugo, error)
+	BindArugoApp(arugo *Arugo)
 }
 
+type ArugoConsumerBase struct {
+	QueueName  string
+	_publisher *ArugoPublisher
+	_app       *Arugo
+}
+
+func (b *ArugoConsumerBase) GetArugoApp() (*Arugo, error) {
+	if b._app == nil {
+		return nil, errors.New("no arugo is binded.")
+	}
+
+	return b._app, nil
+}
+
+func (b *ArugoConsumerBase) BindArugoApp(arugo *Arugo) {
+	b._app = arugo
+}
+
+func (b *ArugoConsumerBase) GetPublisher() (*ArugoPublisher, error) {
+	if b._publisher == nil {
+		return nil, errors.New("no publisher is binded.")
+	}
+
+	app, err := b.GetArugoApp()
+	if err != nil {
+		return nil, errors.Errorf("cannot get arugo: %s", err)
+	}
+
+	b._publisher, err = app.GetPublisher(3, true)
+	if err != nil {
+		return nil, errors.Errorf("cannot get publisher: %s", err)
+	}
+
+	return b._publisher, nil
+}
+
+func (b *ArugoConsumerBase) GetQueueName() string {
+	return b.QueueName
+}
+
+func (b *ArugoConsumerBase) GetConsumeConfig() *AmqpConsumeConfig {
+	return &AmqpConsumeConfig{
+		ConsumeKey: "",
+		Exclusive:  false,
+		NoAck:      false,
+		NoLocal:    false,
+		NoWait:     false,
+		Args:       nil,
+	}
+}
+
+func (b *ArugoConsumerBase) Handle(req amqp.Delivery) error {
+	panic("not implemented")
+}
+
+func (b *ArugoConsumerBase) OnChannelCreated(channel *amqp.Channel) error {
+	panic("not implemented")
+}
+
+func (b *ArugoConsumerBase) Start(yamlConfig string, detach bool) error {
+	app := NewArugo(yamlConfig)
+	err := app.AddConsumer(b.QueueName, b)
+	if err != nil {
+		return errors.Errorf("cannot add consumer: %s", err)
+	}
+	return app.Start(detach)
+}
+
+// 这里是关于主控 Arugo 的定义
 type arugoConsumer struct {
 	Consumer ArugoConsumerIf
 	Key      string
