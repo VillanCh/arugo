@@ -53,8 +53,8 @@ func (b *ArugoConsumerBase) BindArugoApp(arugo *Arugo) {
 }
 
 func (b *ArugoConsumerBase) GetPublisher() (*ArugoPublisher, error) {
-	if b._publisher == nil {
-		return nil, errors.New("no publisher is binded.")
+	if b._publisher != nil {
+		return b._publisher, nil
 	}
 
 	app, err := b.GetArugoApp()
