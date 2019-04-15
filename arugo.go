@@ -35,6 +35,8 @@ type ArugoConsumerIf interface {
 }
 
 type ArugoConsumerBase struct {
+	i ArugoConsumerIf
+
 	QueueName  string
 	_publisher *ArugoPublisher
 	_app       *Arugo
@@ -57,7 +59,7 @@ func (b *ArugoConsumerBase) GetPublisher() (*ArugoPublisher, error) {
 		return b._publisher, nil
 	}
 
-	app, err := b.GetArugoApp()
+	app, err := b.i.GetArugoApp()
 	if err != nil {
 		return nil, errors.Errorf("cannot get arugo: %s", err)
 	}
@@ -96,7 +98,7 @@ func (b *ArugoConsumerBase) OnChannelCreated(channel *amqp.Channel) error {
 func (b *ArugoConsumerBase) Start(yamlConfig string, detach bool) error {
 	app := NewArugo(yamlConfig)
 	b.BindArugoApp(app)
-	err := app.AddConsumer(b.QueueName, b)
+	err := app.AddConsumer(b.QueueName, b.i)
 	if err != nil {
 		return errors.Errorf("cannot add consumer: %s", err)
 	}
