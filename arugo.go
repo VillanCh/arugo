@@ -95,6 +95,7 @@ func (b *ArugoConsumerBase) OnChannelCreated(channel *amqp.Channel) error {
 
 func (b *ArugoConsumerBase) Start(yamlConfig string, detach bool) error {
 	app := NewArugo(yamlConfig)
+	b.BindArugoApp(app)
 	err := app.AddConsumer(b.QueueName, b)
 	if err != nil {
 		return errors.Errorf("cannot add consumer: %s", err)
